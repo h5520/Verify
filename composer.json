@@ -1,0 +1,21 @@
+{
+    "name": "houzhonghua/verify",
+    "description": "身份证号码验证",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "houzhonghua",
+            "email": "killerweb@sina.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "houzhonghua\\verify\\": "src/"
+        }
+    }
+}
