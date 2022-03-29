@@ -11,4 +11,6 @@ class Verify
 
 		return VerifyID::isCard($id);
 	}
+
+	
 }
