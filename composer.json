@@ -1,6 +1,6 @@
 {
     "name": "houzhonghua/verify",
-    "description": "身份证号码验证",
+    "description": "身份证号码验证、短信验证",
     "type": "library",
     "license": "MIT",
     "authors": [
