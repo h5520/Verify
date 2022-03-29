@@ -24,9 +24,9 @@ class SmsVerify
     protected $mobileName = 'mobile';
     // 验证码字段名
     protected $codeName = 'code';
-	// 手动传入手机号
+    // 手动传入手机号
     protected $_mobile;
-	// 手动传入验证码
+    // 手动传入验证码
     protected $_code;
 
     /**
@@ -52,7 +52,7 @@ class SmsVerify
      * @param string $scene
      * @return $this
      */
-    public function scene(string $scene): TpSms
+    public function scene(string $scene): SmsVerify
     {
         $this->scene = $scene;
         return $this;
@@ -63,7 +63,7 @@ class SmsVerify
      * @param string $mobile
      * @return $this
      */
-    public function mobile(string $mobile): TpSms
+    public function mobile(string $mobile): SmsVerify
     {
         $this->_mobile = $mobile;
         return $this;
@@ -74,7 +74,7 @@ class SmsVerify
      * @param string $code
      * @return $this
      */
-    public function code(string $code): TpSms
+    public function code(string $code): SmsVerify
     {
         $this->_code = $code;
         return $this;
@@ -95,39 +95,39 @@ class SmsVerify
 
         switch ($this->type){
             case 1:
-				// 纯数字型验证码
+                // 纯数字型验证码
                 $range = [0,9];
                 break;
             case 2:
-				// 纯小写字母型验证码
+                // 纯小写字母型验证码
                 $range = [10,35];
                 break;
             case 3:
-				// 纯大写字母型验证码
+                // 纯大写字母型验证码
                 $range = [36,61];
                 break;
             case 4:
-				// 数字与小写字母混合型验证码
+                // 数字与小写字母混合型验证码
                 $range = [0,35];
                 break;
             case 5:
-				// 数字与大写字母混合型验证码
+                // 数字与大写字母混合型验证码
                 $this->character = strtoupper($this->character);
                 $range = [0,35];
                 break;
             case 6:
-				// 小写字母与大写字母混合型验证码
+                // 小写字母与大写字母混合型验证码
                 $range = [10,61];
                 break;
             case 7:
-				// 数字、小写字母和大写字母混合型验证码
+                // 数字、小写字母和大写字母混合型验证码
                 $range = [0,61];
                 break;
             default:
-				// 报错：不支持的验证码类型
+                // 报错：不支持的验证码类型
                 throw new \think\Exception('不支持的验证码类型');
         }
-		// 拼接验证码
+        // 拼接验证码
         for ($i = 0; $i < $this->length; $i++){
             if($i == 0){
                 $this->code .= $this->character[random_int(1,$range[1])];
@@ -135,9 +135,9 @@ class SmsVerify
                 $this->code .= $this->character[random_int($range[0],$range[1])];
             }
         }
-		// 缓存
+        // 缓存
         $cacheKey = $this->cachePrefix.$this->scene.$mobile;
-		// 增加ip验证
+        // 增加ip验证
         $cacheVal = $this->code.ip2long(request()->ip());
         cache($cacheKey,$cacheVal,$this->expire);
         return $this->code;
@@ -166,11 +166,13 @@ class SmsVerify
         if (!$code) {
             throw new \think\Exception('未传入验证码');
         }
-		// 获取缓存验证码
+        // 获取缓存验证码
         $cacheCode = cache($this->cachePrefix.$this->scene.$mobile);
         if($cacheCode){
-			// 增加ip验证
+            // 增加ip验证
             if ($cacheCode === $code.ip2long(request()->ip())){
+                // 验证成功删除
+                cache($this->cachePrefix.$this->scene.$mobile, NULL);
                 return true;
             }
             $this->error = '验证码不正确';
