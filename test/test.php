@@ -32,27 +32,50 @@ class Test extends BaseController
      */
     public function smsverify()
     {
+        // 生成配置文件
+        $config = [
+            'cachePrefix' => 'tpsms',
+            // 验证码字符池
+            'character' => '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
+            // 验证码过期时间（s），默认 3 分钟
+            'expire' => 180,
+            // 验证码位数
+            'length' => 6,
+            // 验证码类型
+            'type' => 1,
+            // 验证码
+            'code' => '',
+            // 场景
+            'scene' => '',
+            // 错误信息
+            'error' => '',
+            // 手机号字段名
+            'mobileName' => 'mobile',
+            // 验证码字段名
+            'codeName' => 'code'
+        ];
+        
         // 生成验证码并缓存
-        $code = (new TpSms())->mobile('18888888888')->create();
+        $code = (new SmsVerify($config))->mobile('18888888888')->create();
 
         // 生成登录（login）场景的验证码并缓存
-        $code = (new TpSms())->scene('login')->create();
+        $code = (new SmsVerify($config))->scene('login')->create();
 
         // 手动传入号码和验证码
-        $tpSms->mobile('18888888888')->code('123456')->check();
+        $smsVerify->mobile('18888888888')->code('123456')->check();
 
         // 验证短信验证码
-        $tpSms = new TpSms();
-        if(! $tpSms->check()){
+        $smsVerify = new SmsVerify();
+        if(! $smsVerify->check()){
             //验证失败，获取失败信息
-            $msg = $tpSms->getErrorMsg();
+            $msg = $smsVerify->getErrorMsg();
         }
 
         // 验证登录（login）场景短信验证码
-        $tpSms = new TpSms();
-        if(! $tpSms->scene('login')->check()){
+        $smsVerify = new SmsVerify();
+        if(! $smsVerify->scene('login')->check()){
             //验证失败，获取失败信息
-            $msg = $tpSms->getErrorMsg();
+            $msg = $smsVerify->getErrorMsg();
         }
     }
 

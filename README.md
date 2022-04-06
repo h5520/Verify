@@ -33,25 +33,25 @@ use houzhonghua\verify\SmsVerify;
 
 ```php
 // 生成验证码并缓存
-$code = (new TpSms())->mobile('18888888888')->create();
+$code = (new SmsVerify())->mobile('18888888888')->create();
 
 // 生成登录（login）场景的验证码并缓存
-$code = (new TpSms())->scene('login')->create();
+$code = (new SmsVerify())->scene('login')->create();
 
 // 手动传入号码和验证码
-$tpSms->mobile('18888888888')->code('123456')->check();
+$smsVerify->mobile('18888888888')->code('123456')->check();
 
 // 验证短信验证码
-$tpSms = new TpSms();
-if(! $tpSms->check()){
+$smsVerify = new SmsVerify();
+if(! $smsVerify->check()){
     //验证失败，获取失败信息
-    $msg = $tpSms->getErrorMsg();
+    $msg = $smsVerify->getErrorMsg();
 }
 
 // 验证登录（login）场景短信验证码
-$tpSms = new TpSms();
-if(! $tpSms->scene('login')->check()){
+$smsVerify = new SmsVerify();
+if(! $smsVerify->scene('login')->check()){
     //验证失败，获取失败信息
-    $msg = $tpSms->getErrorMsg();
+    $msg = $smsVerify->getErrorMsg();
 }
 ```
